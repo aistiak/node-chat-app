@@ -8,6 +8,8 @@ const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
+
+const MP = {}  ;
 const io = socketio(server,{
     path : '/',
     cors: {
@@ -24,7 +26,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('A user connected');
-
+    
     // Handle events from the client
     socket.on('chat message', (msg) => {
         console.log('message: ' + msg);
@@ -33,6 +35,11 @@ io.on('connection', (socket) => {
         io.emit('chat message', msg);
     });
 
+    socket.on('send-text',(data)=>{
+        MP[data.id ] = data.id
+        console.log({MP})
+        console.log({data})
+    })
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected');

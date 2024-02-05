@@ -12,7 +12,18 @@
 
   <h1>Socket.IO Client Example</h1>
 
+  <p id="texts" ></p>
+  <input id="text-to" />
+  <input id="message" />
+
+ 
+  <button id="send-btn" >send</button>
   <script>
+
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
+console.log({id});
+
     // Connect to the Socket.IO server
     const socket = io('http://localhost:3010/');
 
@@ -25,8 +36,17 @@
       console.log('Disconnected from the server');
     });
 
+
     // Your custom event handlers go here
 
+    document.getElementById("send-btn").onclick = ('click',()=>{
+        const text = document.getElementById("message").value
+        console.log({text})
+        document.getElementById("message").value = ''
+        document.getElementById("texts").innerHTML = document.getElementById("texts").innerHTML + text + '<br/>'
+        const textTo = document.getElementById("text-to").value 
+        socket.emit('send-text',{id,text,to : textTo})
+    })
   </script>
 
 </body>
